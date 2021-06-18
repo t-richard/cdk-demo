@@ -1,0 +1,502 @@
+Resources:
+  PrimaryVPCD6439CDF:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: HelloCdkStack/PrimaryVPC
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/Resource
+  PrimaryVPCPublicSubnet1SubnetBEFE2789:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.0.0/19
+      VpcId:
+        Ref: PrimaryVPCD6439CDF
+      AvailabilityZone: eu-central-1a
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Public
+        - Key: aws-cdk:subnet-type
+          Value: Public
+        - Key: Name
+          Value: HelloCdkStack/PrimaryVPC/PublicSubnet1
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PublicSubnet1/Subnet
+  PrimaryVPCPublicSubnet1RouteTable61A4AEC5:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: PrimaryVPCD6439CDF
+      Tags:
+        - Key: Name
+          Value: HelloCdkStack/PrimaryVPC/PublicSubnet1
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PublicSubnet1/RouteTable
+  PrimaryVPCPublicSubnet1RouteTableAssociation5FECF935:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: PrimaryVPCPublicSubnet1RouteTable61A4AEC5
+      SubnetId:
+        Ref: PrimaryVPCPublicSubnet1SubnetBEFE2789
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PublicSubnet1/RouteTableAssociation
+  PrimaryVPCPublicSubnet1DefaultRouteF661224B:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: PrimaryVPCPublicSubnet1RouteTable61A4AEC5
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: PrimaryVPCIGW3CAB2D7A
+    DependsOn:
+      - PrimaryVPCVPCGW53592FB4
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PublicSubnet1/DefaultRoute
+  PrimaryVPCPublicSubnet1EIP8CC3401A:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: HelloCdkStack/PrimaryVPC/PublicSubnet1
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PublicSubnet1/EIP
+  PrimaryVPCPublicSubnet1NATGatewayC9A9EE58:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      SubnetId:
+        Ref: PrimaryVPCPublicSubnet1SubnetBEFE2789
+      AllocationId:
+        Fn::GetAtt:
+          - PrimaryVPCPublicSubnet1EIP8CC3401A
+          - AllocationId
+      Tags:
+        - Key: Name
+          Value: HelloCdkStack/PrimaryVPC/PublicSubnet1
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PublicSubnet1/NATGateway
+  PrimaryVPCPublicSubnet2SubnetA0763951:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.32.0/19
+      VpcId:
+        Ref: PrimaryVPCD6439CDF
+      AvailabilityZone: eu-central-1b
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Public
+        - Key: aws-cdk:subnet-type
+          Value: Public
+        - Key: Name
+          Value: HelloCdkStack/PrimaryVPC/PublicSubnet2
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PublicSubnet2/Subnet
+  PrimaryVPCPublicSubnet2RouteTableD4F3D083:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: PrimaryVPCD6439CDF
+      Tags:
+        - Key: Name
+          Value: HelloCdkStack/PrimaryVPC/PublicSubnet2
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PublicSubnet2/RouteTable
+  PrimaryVPCPublicSubnet2RouteTableAssociationE9D25C15:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: PrimaryVPCPublicSubnet2RouteTableD4F3D083
+      SubnetId:
+        Ref: PrimaryVPCPublicSubnet2SubnetA0763951
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PublicSubnet2/RouteTableAssociation
+  PrimaryVPCPublicSubnet2DefaultRoute9B217EC9:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: PrimaryVPCPublicSubnet2RouteTableD4F3D083
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: PrimaryVPCIGW3CAB2D7A
+    DependsOn:
+      - PrimaryVPCVPCGW53592FB4
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PublicSubnet2/DefaultRoute
+  PrimaryVPCPublicSubnet2EIP951E610B:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: HelloCdkStack/PrimaryVPC/PublicSubnet2
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PublicSubnet2/EIP
+  PrimaryVPCPublicSubnet2NATGateway1E201458:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      SubnetId:
+        Ref: PrimaryVPCPublicSubnet2SubnetA0763951
+      AllocationId:
+        Fn::GetAtt:
+          - PrimaryVPCPublicSubnet2EIP951E610B
+          - AllocationId
+      Tags:
+        - Key: Name
+          Value: HelloCdkStack/PrimaryVPC/PublicSubnet2
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PublicSubnet2/NATGateway
+  PrimaryVPCPublicSubnet3SubnetE9E42C62:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.64.0/19
+      VpcId:
+        Ref: PrimaryVPCD6439CDF
+      AvailabilityZone: eu-central-1c
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Public
+        - Key: aws-cdk:subnet-type
+          Value: Public
+        - Key: Name
+          Value: HelloCdkStack/PrimaryVPC/PublicSubnet3
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PublicSubnet3/Subnet
+  PrimaryVPCPublicSubnet3RouteTableDB90F1AB:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: PrimaryVPCD6439CDF
+      Tags:
+        - Key: Name
+          Value: HelloCdkStack/PrimaryVPC/PublicSubnet3
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PublicSubnet3/RouteTable
+  PrimaryVPCPublicSubnet3RouteTableAssociation4B5124C6:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: PrimaryVPCPublicSubnet3RouteTableDB90F1AB
+      SubnetId:
+        Ref: PrimaryVPCPublicSubnet3SubnetE9E42C62
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PublicSubnet3/RouteTableAssociation
+  PrimaryVPCPublicSubnet3DefaultRoute67D1BD60:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: PrimaryVPCPublicSubnet3RouteTableDB90F1AB
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: PrimaryVPCIGW3CAB2D7A
+    DependsOn:
+      - PrimaryVPCVPCGW53592FB4
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PublicSubnet3/DefaultRoute
+  PrimaryVPCPublicSubnet3EIPCBA6E3A7:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+      Tags:
+        - Key: Name
+          Value: HelloCdkStack/PrimaryVPC/PublicSubnet3
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PublicSubnet3/EIP
+  PrimaryVPCPublicSubnet3NATGatewayBB5F60EA:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      SubnetId:
+        Ref: PrimaryVPCPublicSubnet3SubnetE9E42C62
+      AllocationId:
+        Fn::GetAtt:
+          - PrimaryVPCPublicSubnet3EIPCBA6E3A7
+          - AllocationId
+      Tags:
+        - Key: Name
+          Value: HelloCdkStack/PrimaryVPC/PublicSubnet3
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PublicSubnet3/NATGateway
+  PrimaryVPCPrivateSubnet1Subnet526C944E:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.96.0/19
+      VpcId:
+        Ref: PrimaryVPCD6439CDF
+      AvailabilityZone: eu-central-1a
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Private
+        - Key: aws-cdk:subnet-type
+          Value: Private
+        - Key: Name
+          Value: HelloCdkStack/PrimaryVPC/PrivateSubnet1
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PrivateSubnet1/Subnet
+  PrimaryVPCPrivateSubnet1RouteTable6552B2FD:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: PrimaryVPCD6439CDF
+      Tags:
+        - Key: Name
+          Value: HelloCdkStack/PrimaryVPC/PrivateSubnet1
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PrivateSubnet1/RouteTable
+  PrimaryVPCPrivateSubnet1RouteTableAssociationB8171DBE:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: PrimaryVPCPrivateSubnet1RouteTable6552B2FD
+      SubnetId:
+        Ref: PrimaryVPCPrivateSubnet1Subnet526C944E
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PrivateSubnet1/RouteTableAssociation
+  PrimaryVPCPrivateSubnet1DefaultRoute6E7FEE59:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: PrimaryVPCPrivateSubnet1RouteTable6552B2FD
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: PrimaryVPCPublicSubnet1NATGatewayC9A9EE58
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PrivateSubnet1/DefaultRoute
+  PrimaryVPCPrivateSubnet2SubnetB1350681:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.128.0/19
+      VpcId:
+        Ref: PrimaryVPCD6439CDF
+      AvailabilityZone: eu-central-1b
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Private
+        - Key: aws-cdk:subnet-type
+          Value: Private
+        - Key: Name
+          Value: HelloCdkStack/PrimaryVPC/PrivateSubnet2
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PrivateSubnet2/Subnet
+  PrimaryVPCPrivateSubnet2RouteTable094BC2EE:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: PrimaryVPCD6439CDF
+      Tags:
+        - Key: Name
+          Value: HelloCdkStack/PrimaryVPC/PrivateSubnet2
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PrivateSubnet2/RouteTable
+  PrimaryVPCPrivateSubnet2RouteTableAssociation3A803D59:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: PrimaryVPCPrivateSubnet2RouteTable094BC2EE
+      SubnetId:
+        Ref: PrimaryVPCPrivateSubnet2SubnetB1350681
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PrivateSubnet2/RouteTableAssociation
+  PrimaryVPCPrivateSubnet2DefaultRoute86CD2E52:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: PrimaryVPCPrivateSubnet2RouteTable094BC2EE
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: PrimaryVPCPublicSubnet2NATGateway1E201458
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PrivateSubnet2/DefaultRoute
+  PrimaryVPCPrivateSubnet3SubnetA4140044:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.160.0/19
+      VpcId:
+        Ref: PrimaryVPCD6439CDF
+      AvailabilityZone: eu-central-1c
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: aws-cdk:subnet-name
+          Value: Private
+        - Key: aws-cdk:subnet-type
+          Value: Private
+        - Key: Name
+          Value: HelloCdkStack/PrimaryVPC/PrivateSubnet3
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PrivateSubnet3/Subnet
+  PrimaryVPCPrivateSubnet3RouteTable8BD988C6:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: PrimaryVPCD6439CDF
+      Tags:
+        - Key: Name
+          Value: HelloCdkStack/PrimaryVPC/PrivateSubnet3
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PrivateSubnet3/RouteTable
+  PrimaryVPCPrivateSubnet3RouteTableAssociation4CF570BE:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: PrimaryVPCPrivateSubnet3RouteTable8BD988C6
+      SubnetId:
+        Ref: PrimaryVPCPrivateSubnet3SubnetA4140044
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PrivateSubnet3/RouteTableAssociation
+  PrimaryVPCPrivateSubnet3DefaultRouteA96EB237:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: PrimaryVPCPrivateSubnet3RouteTable8BD988C6
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: PrimaryVPCPublicSubnet3NATGatewayBB5F60EA
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/PrivateSubnet3/DefaultRoute
+  PrimaryVPCIGW3CAB2D7A:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: HelloCdkStack/PrimaryVPC
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/IGW
+  PrimaryVPCVPCGW53592FB4:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: PrimaryVPCD6439CDF
+      InternetGatewayId:
+        Ref: PrimaryVPCIGW3CAB2D7A
+    Metadata:
+      aws:cdk:path: HelloCdkStack/PrimaryVPC/VPCGW
+  RDSSecurityGroup6BF2CF10:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: HelloCdkStack/RDSSecurityGroup
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      SecurityGroupIngress:
+        - CidrIp: 45.132.251.229/32
+          Description: from 45.132.251.229/32:5432
+          FromPort: 5432
+          IpProtocol: tcp
+          ToPort: 5432
+        - CidrIp: 134.115.152.29/32
+          Description: from 134.115.152.29/32:5432
+          FromPort: 5432
+          IpProtocol: tcp
+          ToPort: 5432
+        - CidrIp: 177.127.29.205/32
+          Description: from 177.127.29.205/32:5432
+          FromPort: 5432
+          IpProtocol: tcp
+          ToPort: 5432
+        - CidrIp: 48.150.56.15/32
+          Description: from 48.150.56.15/32:5432
+          FromPort: 5432
+          IpProtocol: tcp
+          ToPort: 5432
+        - CidrIp: 100.202.255.202/32
+          Description: from 100.202.255.202/32:5432
+          FromPort: 5432
+          IpProtocol: tcp
+          ToPort: 5432
+      VpcId:
+        Ref: PrimaryVPCD6439CDF
+    Metadata:
+      aws:cdk:path: HelloCdkStack/RDSSecurityGroup/Resource
+  DatabaseSubnetGroup7D60F180:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: Subnet group for Database database
+      SubnetIds:
+        - Ref: PrimaryVPCPrivateSubnet1Subnet526C944E
+        - Ref: PrimaryVPCPrivateSubnet2SubnetB1350681
+        - Ref: PrimaryVPCPrivateSubnet3SubnetA4140044
+    Metadata:
+      aws:cdk:path: HelloCdkStack/Database/SubnetGroup/Default
+  DatabaseSecret3B817195:
+    Type: AWS::SecretsManager::Secret
+    Properties:
+      Description:
+        Fn::Join:
+          - ""
+          - - "Generated by the CDK for stack: "
+            - Ref: AWS::StackName
+      GenerateSecretString:
+        ExcludeCharacters: " %+~`#$&*()|[]{}:;<>?!'/@\"\\"
+        GenerateStringKey: password
+        PasswordLength: 30
+        SecretStringTemplate: '{"username":"postgres"}'
+    Metadata:
+      aws:cdk:path: HelloCdkStack/Database/Secret/Resource
+  DatabaseSecretAttachmentE5D1B020:
+    Type: AWS::SecretsManager::SecretTargetAttachment
+    Properties:
+      SecretId:
+        Ref: DatabaseSecret3B817195
+      TargetId:
+        Ref: DatabaseB269D8BB
+      TargetType: AWS::RDS::DBInstance
+    Metadata:
+      aws:cdk:path: HelloCdkStack/Database/Secret/Attachment/Resource
+  DatabaseB269D8BB:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBInstanceClass: db.m5.large
+      AllocatedStorage: "100"
+      CopyTagsToSnapshot: true
+      DBSubnetGroupName:
+        Ref: DatabaseSubnetGroup7D60F180
+      Engine: postgres
+      EngineVersion: "13.2"
+      MasterUsername:
+        Fn::Join:
+          - ""
+          - - "{{resolve:secretsmanager:"
+            - Ref: DatabaseSecret3B817195
+            - :SecretString:username::}}
+      MasterUserPassword:
+        Fn::Join:
+          - ""
+          - - "{{resolve:secretsmanager:"
+            - Ref: DatabaseSecret3B817195
+            - :SecretString:password::}}
+      MultiAZ: true
+      StorageType: gp2
+      VPCSecurityGroups:
+        - Fn::GetAtt:
+            - RDSSecurityGroup6BF2CF10
+            - GroupId
+    UpdateReplacePolicy: Snapshot
+    DeletionPolicy: Snapshot
+    Metadata:
+      aws:cdk:path: HelloCdkStack/Database/Resource
+  MyFirstBucketB8884501:
+    Type: AWS::S3::Bucket
+    Properties:
+      VersioningConfiguration:
+        Status: Enabled
+    UpdateReplacePolicy: Delete
+    DeletionPolicy: Delete
+    Metadata:
+      aws:cdk:path: HelloCdkStack/MyFirstBucket/Resource
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Analytics: v2:deflate64:H4sIAAAAAAAAA11PTW/CMAz9LdxDoN1pt1GYEJepahF3N3gsfCTIcUAo6n9f2qwU7eTn5+fn50xm83c5n3zA3U3V/jQLyhLKUDOok6jQWU8KxdIax+QVi+W3GdhWdEsBVS7D7qq60a5citI3Z61q3xjs5SOqrGfcQnPGkR+5hXNWaWBtzVPcgc9N2ZUv4DUw3uEhStK3CEfjjWGkiAdBSvLXLTj+8nNBw6JG5UnzY03WX/sMr0QraO9kWAFDAw438WUw8fl057mzKl6JQR2dKIVZFcNmK1zPugsYOCDJkE52wlS2QAfkl4RPwf9J9HqTofDqlK4k1LatMHaP8uhmtyyXeS6zydFpPSVvWF9QVqn+AmF/NvvoAQAA
+    Metadata:
+      aws:cdk:path: HelloCdkStack/CDKMetadata/Default
+
